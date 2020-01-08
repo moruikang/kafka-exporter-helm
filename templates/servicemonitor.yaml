@@ -6,7 +6,6 @@ metadata:
     app.kubernetes.io/instance: {{ include "kafka-exporter.name" . }}
     app.kubernetes.io/managed-by: Tiller
     app.kubernetes.io/name: {{ .Release.Name }}
-    release: prometheus-op
   name: {{ include "kafka-exporter.fullname" . }}
 spec:
   endpoints:
