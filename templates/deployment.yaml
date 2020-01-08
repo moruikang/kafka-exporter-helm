@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ include "kafka-exporter.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "kafka-exporter.name" . }}
+    helm.sh/chart: {{ include "kafka-exporter.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "kafka-exporter.name" . }}
+      release: {{ .Release.Name | quote }}
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: {{ .Values.kafka.port | quote }}
+      labels:
+        app: {{ template "kafka-exporter.name" . }}
+        release: {{ .Release.Name | quote }}
+    spec:
+      containers:
+      - image: "{{ .Values.exporter.image }}:{{ .Values.exporter.tag }}"
+        name: kafka-exporter
+        args:
+          - --kafka.server={{ .Values.kafka.host1}}:9092
+          - --kafka.server={{ .Values.kafka.host2}}:9092
+          - --kafka.server={{ .Values.kafka.host3}}:9092
+          - --web.listen-address=:{{ .Values.exporter.port }}
+        ports:
+          - containerPort: {{ .Values.exporter.port }}
+            name: metrics

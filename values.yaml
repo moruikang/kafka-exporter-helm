@@ -1,0 +1,16 @@
+# ------------------------------------------------------------------------------
+# Kafka-exporter:
+# ------------------------------------------------------------------------------
+
+## created by moruikang
+
+kafka:
+  host1: 
+  host2: 
+  host3: 
+  port: 9092
+
+exporter:
+  image: danielqsj/kafka-exporter
+  tag: latest
+  port: 9308
